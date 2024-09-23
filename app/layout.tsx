@@ -5,7 +5,7 @@ import { UserProvider } from '@/lib/auth';
 import { getUser } from '@/lib/db/queries';
 
 export const metadata: Metadata = {
-  title: 'Next.js SaaS Starter',
+  title: 'Teammo - The Team Management Platform',
   description: 'Get started quickly with Next.js, Postgres, and Stripe.',
 };
 
@@ -25,9 +25,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`bg-white dark:bg-gray-950 text-black dark:text-white ${manrope.className}`}
+      className={`bg-dark ${manrope.className}`}
     >
-      <body className="min-h-[100dvh] bg-gray-50">
+      <body className="min-h-screen">
         <UserProvider userPromise={userPromise}>{children}</UserProvider>
       </body>
     </html>
