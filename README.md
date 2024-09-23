@@ -125,3 +125,4 @@ While this template is intentionally minimal and to be used as a learning resour
 - https://shipfa.st
 - https://makerkit.dev
 # Teammo
+# Teammo
