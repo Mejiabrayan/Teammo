@@ -23,6 +23,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../../../components/ui/tooltip';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../../../components/ui/select';
 
 type Task = {
   id: string;
@@ -40,6 +47,7 @@ export default function DashboardPage() {
     (state, newTask: Task) => [...state, newTask]
   );
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -129,7 +137,11 @@ export default function DashboardPage() {
             {optimisticTasks
               .filter((task) => task.status === column)
               .map((task) => (
-                <Dialog key={task.id}>
+                <Dialog
+                  key={task.id}
+                  open={isDialogOpen}
+                  onOpenChange={setIsDialogOpen}
+                >
                   <DialogTrigger asChild>
                     <div className='bg-white rounded-lg p-4 shadow-sm mb-4 cursor-pointer hover:bg-gray-50'>
                       <p className='font-medium'>{task.title}</p>
@@ -152,19 +164,27 @@ export default function DashboardPage() {
                         <Label htmlFor='status' className='text-right'>
                           Status
                         </Label>
-                        <select
-                          id='status'
-                          className='col-span-3'
+                        <Select
                           value={selectedTask?.status || task.status}
-                          onChange={(e) => {
-                            const newStatus = e.target.value as 'To Do' | 'In Progress' | 'Done';
-                            setSelectedTask({...task, status: newStatus});
+                          onValueChange={(value) => {
+                            const newStatus = value as
+                              | 'To Do'
+                              | 'In Progress'
+                              | 'Done';
+                            setSelectedTask({ ...task, status: newStatus });
                           }}
                         >
-                          <option value='To Do'>To Do</option>
-                          <option value='In Progress'>In Progress</option>
-                          <option value='Done'>Done</option>
-                        </select>
+                          <SelectTrigger className='col-span-3'>
+                            <SelectValue placeholder='Select status' />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value='To Do'>To Do</SelectItem>
+                            <SelectItem value='In Progress'>
+                              In Progress
+                            </SelectItem>
+                            <SelectItem value='Done'>Done</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div className='grid grid-cols-4 items-center gap-4'>
                         <Label htmlFor='description' className='text-right'>
@@ -173,23 +193,34 @@ export default function DashboardPage() {
                         <Textarea
                           id='description'
                           placeholder='Add a description...'
-                          value={selectedTask?.description || task.description || ''}
+                          value={
+                            selectedTask?.description || task.description || ''
+                          }
                           onChange={(e) => {
-                            setSelectedTask({...task, description: e.target.value});
+                            setSelectedTask({
+                              ...task,
+                              description: e.target.value,
+                            });
                           }}
                           className='col-span-3'
                         />
                       </div>
                     </div>
                     <DialogFooter>
-                      <Button onClick={() => {
-                        if (selectedTask) {
-                          saveTaskChanges(selectedTask);
-                          moveTask(selectedTask.id, selectedTask.status);
-                          updateTaskDescription(selectedTask.id, selectedTask.description || '');
-                          setSelectedTask(null);
-                        }
-                      }}>
+                      <Button
+                        onClick={() => {
+                          if (selectedTask) {
+                            saveTaskChanges(selectedTask);
+                            moveTask(selectedTask.id, selectedTask.status);
+                            updateTaskDescription(
+                              selectedTask.id,
+                              selectedTask.description || ''
+                            );
+                            setSelectedTask(null);
+                            setIsDialogOpen(false);
+                          }
+                        }}
+                      >
                         Save changes
                       </Button>
                     </DialogFooter>
