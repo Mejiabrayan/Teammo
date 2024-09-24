@@ -126,3 +126,4 @@ While this template is intentionally minimal and to be used as a learning resour
 - https://makerkit.dev
 # Teammo
 # Teammo
+# Teammo
