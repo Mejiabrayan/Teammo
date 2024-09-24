@@ -57,6 +57,7 @@ export default function TestPage() {
     const swapy = createSwapy(container, {
       swapMode: 'hover',
       continuousMode: false,
+      animation: 'spring'
     });
     swapy.onSwap(({ data }) => {
       console.log('swap', data);

@@ -55,13 +55,13 @@ export default function DashboardLayout({
           <Image src='/logo.svg' alt='Teammo Logo' width={80} height={40} />
         </div>
 
-        <nav className='h-full overflow-y-auto py-4'>
+        <nav className='h-full overflow-y-auto py-10'>
           {navItems.map((item) => (
             <Link key={item.href} href={item.href} passHref>
               <Button
                 variant={pathname === item.href ? 'secondary' : 'ghost'}
                 className={`my-1 w-full justify-start px-4 py-2 ${
-                  pathname === item.href ? 'bg-gray-50' : ''
+                  pathname === item.href ? 'bg-gray-100' : ''
                 }`}
                 onClick={() => setIsSidebarOpen(false)}
               >
