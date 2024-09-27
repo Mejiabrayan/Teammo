@@ -54,7 +54,7 @@ export function Sidebar() {
                 }`}
                 onClick={() => setIsSidebarOpen(false)}
               >
-                <item.icon className='mr-3 h-5 w-5' />
+                <item.icon className='mr-3 h-5 w-5 text-gray-400 ' />
                 {item.label}
               </Button>
             </Link>
