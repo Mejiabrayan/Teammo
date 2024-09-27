@@ -1,15 +1,15 @@
 'use client';
 
 import { useRouter } from "next/navigation";
-import { useUser } from "../lib/auth";
+import { useUser } from "@/lib/auth";
 import { useState } from "react";
 import { signOut } from "../app/(login)/actions";
 import Image from "next/image";
 import Link from "next/link";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Home, LogOut } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import Logo from '@/public/logo.svg';
 
 export default function Header() {

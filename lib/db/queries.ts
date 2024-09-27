@@ -69,6 +69,7 @@ export async function getUserWithTeam(userId: number) {
     .select({
       user: users,
       teamId: teamMembers.teamId,
+      organizationName: users.organizationName,
     })
     .from(users)
     .leftJoin(teamMembers, eq(users.id, teamMembers.userId))
@@ -114,6 +115,7 @@ export async function getTeamForUser(userId: number) {
                       id: true,
                       name: true,
                       email: true,
+                      organizationName: true,
                     },
                   },
                 },

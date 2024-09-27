@@ -36,8 +36,8 @@ export default function GeneralPage() {
   };
 
   return (
-    <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-medium text-gray-900 mb-6">
+    <section className='flex-1 p-4 lg:p-8'>
+      <h1 className='text-lg lg:text-2xl font-medium text-gray-900 mb-6'>
         General Settings
       </h1>
 
@@ -46,42 +46,53 @@ export default function GeneralPage() {
           <CardTitle>Account Information</CardTitle>
         </CardHeader>
         <CardContent>
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          <form className='space-y-4' onSubmit={handleSubmit}>
+            {/* organization name */}
             <div>
-              <Label htmlFor="name">Name</Label>
+              <Label htmlFor='name'>Organization</Label>
               <Input
-                id="name"
-                name="name"
-                placeholder="Enter your name"
+                id='organizationName'
+                name='organizationName'
+                placeholder='Enter your organization name'
+                defaultValue={user?.organizationName || ''}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor='name'>Name</Label>
+              <Input
+                id='name'
+                name='name'
+                placeholder='Enter your name'
                 defaultValue={user?.name || ''}
                 required
               />
             </div>
             <div>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor='email'>Email</Label>
               <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Enter your email"
+                id='email'
+                name='email'
+                type='email'
+                placeholder='Enter your email'
                 defaultValue={user?.email || ''}
                 required
               />
             </div>
             {state.error && (
-              <p className="text-red-500 text-sm">{state.error}</p>
+              <p className='text-red-500 text-sm'>{state.error}</p>
             )}
             {state.success && (
-              <p className="text-green-500 text-sm">{state.success}</p>
+              <p className='text-green-500 text-sm'>{state.success}</p>
             )}
             <Button
-              type="submit"
-              className="bg-orange-500 hover:bg-orange-600 text-white"
+              type='submit'
+              className='bg-orange-500 hover:bg-orange-600 text-white'
               disabled={isPending}
             >
               {isPending ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
                   Saving...
                 </>
               ) : (
