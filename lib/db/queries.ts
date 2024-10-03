@@ -1,8 +1,28 @@
+
 import { desc, and, eq, isNull } from 'drizzle-orm';
 import { db } from './drizzle';
-import { activityLogs, teamMembers, teams, users } from './schema';
+import { activityLogs, teamMembers, teams, users, tasks } from './schema';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth/session';
+import { Task } from '@/types/task';
+
+export async function getTasks(userId: number): Promise<Task[]> {
+  const result = await db
+    .select()
+    .from(tasks)
+    .where(eq(tasks.userId, userId))
+    .orderBy(desc(tasks.createdAt));
+
+  return result.map(task => ({
+    id: task.id,
+    userId: task.userId,
+    title: task.title,
+    description: task.description,
+    status: task.status as 'To Do' | 'In Progress' | 'Done',
+    createdAt: task.createdAt,
+    updatedAt: task.updatedAt
+  }));
+}
 
 export async function getUser() {
   const sessionCookie = cookies().get('session');
@@ -99,6 +119,9 @@ export async function getActivityLogs() {
     .orderBy(desc(activityLogs.timestamp))
     .limit(10);
 }
+
+
+
 
 export async function getTeamForUser(userId: number) {
   const result = await db.query.users.findFirst({

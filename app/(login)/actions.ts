@@ -304,7 +304,7 @@ export const deleteAccount = validatedActionWithUser(
 const updateAccountSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100),
   email: z.string().email('Invalid email').max(255),
-  organizationName: z.string().max(255).optional(),
+  organizationName: z.string().max(255),
 });
 
 export const updateAccount = validatedActionWithUser(

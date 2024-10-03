@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import Logo from '@/public/logo.svg';
 
 export default function Header() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const { user, setUser } = useUser();
     const router = useRouter();
   

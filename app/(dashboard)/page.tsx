@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 
@@ -8,7 +7,7 @@ export default function HomePage() {
     <div className='flex flex-col min-h-screen'>
       <header className='px-4 lg:px-6 h-14 flex items-center'>
         <a className='flex items-center justify-center' href='#'>
-          <Image src='/logo.svg' alt='Teammo Logo' width={70} height={40} />
+          <Image src='/teammo.png' alt='Teammo Logo' width={70} height={40} />
         </a>
         <nav className='ml-auto flex gap-4 sm:gap-6'>
           <a
@@ -54,27 +53,28 @@ export default function HomePage() {
                 </div>
                 <div className='w-full max-w-sm space-y-2'>
                   <form className='flex space-x-2'>
-                    <Input
+                    {/* <Input
                       className='max-w-lg flex-1'
                       placeholder='Enter your email'
                       type='email'
-                    />
-                    <Button type='submit'>Get Started</Button>
+                    /> */}
+                    <Button type='submit'><a href='/dashboard'>Get Started</a></Button>
                   </form>
                   <p className='text-xs text-gray-500 dark:text-gray-400'>
                     Start your 14-day free trial. No credit card required.
                   </p>
                 </div>
               </div>
-              <div className='flex items-center justify-center'>
-                <div className='relative w-[400px] h-[400px] sm:w-[500px] sm:h-[500px] md:w-[600px] md:h-[600px] lg:w-[500px] lg:h-[500px] xl:w-[550px] xl:h-[550px]'>
+              <div className='hidden lg:flex items-center justify-center overflow-hidden'>
+                <div className='relative w-[500px] h-[250px] xl:w-[550px] xl:h-[275px]'>
                   <Image
-                    src='/placeholder.svg'
+                    src='/teammo.png'
                     alt='Teammo Dashboard'
                     layout='fill'
-                    objectFit='contain'
+                    objectFit='cover'
+                    objectPosition='top'
                     priority
-                    className='rounded-2xl shadow-2xl'
+                    className='rounded-t-2xl shadow-2xl'
                   />
                 </div>
               </div>

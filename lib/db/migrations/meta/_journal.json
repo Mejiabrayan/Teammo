@@ -22,6 +22,27 @@
       "when": 1727454293925,
       "tag": "0002_harsh_wiccan",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1727469240212,
+      "tag": "0003_loose_spyke",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1727488995806,
+      "tag": "0004_low_bushwacker",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1727545765689,
+      "tag": "0005_adorable_polaris",
+      "breakpoints": true
     }
   ]
 }

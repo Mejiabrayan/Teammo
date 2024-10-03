@@ -99,6 +99,7 @@ export const tasksRelations = relations(tasks, ({ one }) => ({
 export const usersRelations = relations(users, ({ many }) => ({
   teamMembers: many(teamMembers),
   invitationsSent: many(invitations),
+  tasks: many(tasks),
 }));
 
 export const invitationsRelations = relations(invitations, ({ one }) => ({
