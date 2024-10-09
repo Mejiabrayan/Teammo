@@ -1,15 +1,20 @@
 'use server';
 
 import { db } from '@/lib/db/drizzle';
-import { tasks } from '@/lib/db/schema';
+import { tasks, TaskTag } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { getUser } from '@/lib/db/queries';
+import { Task } from '@/types/task';
 
 const addTaskSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   status: z.enum(['To Do', 'In Progress', 'Done']),
+  assigneeId: z.number(),
+  priority: z.enum(['low', 'medium', 'high']).default('low'),
+  description: z.string().nullable(),
+  tags: z.array(z.nativeEnum(TaskTag)).default([]),
 });
 
 export async function addTask(data: z.infer<typeof addTaskSchema>) {
@@ -18,12 +23,16 @@ export async function addTask(data: z.infer<typeof addTaskSchema>) {
     return { error: 'User not authenticated' };
   }
 
-  const { title, status } = addTaskSchema.parse(data);
+  const { title, status, assigneeId, priority, description, tags } = addTaskSchema.parse(data);
 
   const [newTask] = await db.insert(tasks).values({
-    userId: user.id,
+    creatorId: user.id,
     title,
     status,
+    assigneeId,
+    priority,
+    description,
+    tags,
   }).returning();
 
   revalidatePath('/dashboard');
@@ -35,6 +44,9 @@ const updateTaskSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   status: z.enum(['To Do', 'In Progress', 'Done']),
   description: z.string().nullable(),
+  assigneeId: z.number(),
+  priority: z.enum(['low', 'medium', 'high']),
+  tags: z.array(z.nativeEnum(TaskTag)),
 });
 
 export async function updateTask(data: z.infer<typeof updateTaskSchema>) {
@@ -43,7 +55,7 @@ export async function updateTask(data: z.infer<typeof updateTaskSchema>) {
     return { error: 'User not authenticated' };
   }
 
-  const { id, title, status, description } = updateTaskSchema.parse(data);
+  const { id, title, status, description, assigneeId, priority, tags } = updateTaskSchema.parse(data);
 
   const [updatedTask] = await db
     .update(tasks)
@@ -51,6 +63,9 @@ export async function updateTask(data: z.infer<typeof updateTaskSchema>) {
       title, 
       status, 
       description, 
+      assigneeId,
+      priority,
+      tags,
       updatedAt: new Date() 
     })
     .where(eq(tasks.id, id))

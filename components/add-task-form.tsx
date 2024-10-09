@@ -1,13 +1,12 @@
 'use client';
 
 import { useRef, useTransition, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Plus, Command } from 'lucide-react';
 import { addTask } from '@/app/(dashboard)/actions';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 import { Task } from '@/types/task';
+import { TaskTag } from '@/lib/db/schema';
 
 interface AddTaskFormProps {
   onTaskAddedAction: (newTask: Task) => void;
@@ -24,11 +23,7 @@ export function AddTaskForm({ onTaskAddedAction }: AddTaskFormProps) {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        if (document.activeElement === inputRef.current) {
-          inputRef.current?.blur();
-        } else {
-          inputRef.current?.focus();
-        }
+        inputRef.current?.focus();
       }
     };
 
@@ -41,25 +36,32 @@ export function AddTaskForm({ onTaskAddedAction }: AddTaskFormProps) {
       const result = await addTask({
         title: formData.get('title') as string,
         status: 'To Do',
+        assigneeId: 1, // Default assignee ID, update as needed
+        priority: 'low',
+        description: null,
+        tags: [],
       });
-      
+
       if ('error' in result) {
         console.error(result.error);
         toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to add task. Please try again.",
+          variant: 'destructive',
+          title: 'Error',
+          description: 'Failed to add task. Please try again.',
         });
       } else {
         onTaskAddedAction({
           ...result.task,
-          status: result.task.status as 'To Do' | 'In Progress' | 'Done'
+          status: result.task.status as 'To Do' | 'In Progress' | 'Done',
+          priority: result.task.priority as 'low' | 'medium' | 'high',
+          assigneeId: result.task.assigneeId,
+          tags: result.task.tags as TaskTag[],
         });
         router.refresh();
         formRef.current?.reset();
         toast({
-          title: "Success",
-          description: "Task added successfully!",
+          title: 'Success',
+          description: 'Task added successfully!',
         });
       }
     });
@@ -67,25 +69,21 @@ export function AddTaskForm({ onTaskAddedAction }: AddTaskFormProps) {
 
   return (
     <form ref={formRef} action={handleAddTask} className='flex items-center'>
-      <div className='relative flex-grow mr-2'>
-        <Input
-          ref={inputRef}
-          name="title"
-          placeholder='Add New Task (Cmd+K)'
-          className='pr-8 text-sm font-medium text-gray-500'
-          aria-label='Add new task'
-        />
-        <Command className='absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400' size={16} />
+      <div className='relative flex-grow'>
+        <div
+          className='
+      relative
+      before:pointer-events-none focus-within:before:opacity-100 before:opacity-0 before:absolute before:-inset-1 before:rounded-[11px] before:border before:border-blue-500 before:ring-2 before:ring-blue-500/20 before:transition
+      after:pointer-events-none after:absolute after:inset-px after:rounded-[7px] after:shadow-highlight dark:after:shadow-white/5 dark:focus-within:after:shadow-blue-500/20 after:transition'
+        >
+          <Input
+            ref={inputRef}
+            name='title'
+            placeholder='Add new task (Cmd+K)'
+            aria-label='Add new task'
+          />
+        </div>
       </div>
-      <Button
-        type="submit"
-        disabled={isPending}
-        aria-label='Add new task'
-        className='shadow-md bg-gradient-to-tr from-blue-500 to-blue-600 text-white'
-      > 
-        {isPending ? 'Adding...' : 'Add Task'}
-        <Plus className='w-4 h-4 ml-2' />
-      </Button>
     </form>
   );
 }

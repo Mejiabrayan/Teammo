@@ -7,8 +7,10 @@
     "db:setup": "npx tsx lib/db/setup.ts",
     "db:seed": "npx tsx lib/db/seed.ts",
     "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
     "db:migrate": "npx tsx lib/db/migrate.ts",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:check": "drizzle-kit check:pg"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.0",
@@ -33,6 +35,7 @@
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.24.2",
     "drizzle-orm": "^0.33.0",
@@ -40,10 +43,12 @@
     "jose": "^5.9.2",
     "lucide-react": "^0.441.0",
     "next": "15.0.0-canary.160",
+    "next-themes": "^0.3.0",
     "postcss": "^8.4.47",
     "postgres": "^3.4.4",
     "react": "19.0.0-rc-7771d3a7-20240827",
     "react-beautiful-dnd": "^13.1.1",
+    "react-day-picker": "8.10.1",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "19.0.0-rc-7771d3a7-20240827",

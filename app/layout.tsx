@@ -1,8 +1,9 @@
 import './globals.css';
 import type { Metadata, Viewport } from 'next';
-import { Manrope } from 'next/font/google';
+import { Manrope, Inter } from 'next/font/google';
 import { UserProvider } from '@/lib/auth';
 import { getUser } from '@/lib/db/queries';
+import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
   title: 'Teammo - The Team Management Platform',
@@ -14,6 +15,7 @@ export const viewport: Viewport = {
 };
 
 const manrope = Manrope({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({
   children,
@@ -23,12 +25,18 @@ export default function RootLayout({
   let userPromise = getUser();
 
   return (
-    <html
-      lang="en"
-      className={`bg-dark ${manrope.className}`}
-    >
-      <body className="min-h-screen">
-        <UserProvider userPromise={userPromise}>{children}</UserProvider>
+    <html lang='en' className={`${manrope.className}`}>
+      <body className='min-h-screen'>
+        <UserProvider userPromise={userPromise}>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='light'
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </UserProvider>
       </body>
     </html>
   );

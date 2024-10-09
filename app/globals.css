@@ -33,7 +33,7 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 37 7% 15%;
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
@@ -69,3 +69,6 @@
     @apply bg-background text-foreground;
   }
 }
+.border {
+    background-clip: padding-box;
+  }

@@ -17,6 +17,18 @@ CREATE TABLE IF NOT EXISTS "invitations" (
 	"status" varchar(20) DEFAULT 'pending' NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "tasks" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"creator_id" integer NOT NULL,
+	"assignee_id" integer NOT NULL,
+	"title" varchar(255) NOT NULL,
+	"description" text,
+	"status" varchar(20) DEFAULT 'To Do' NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"priority" varchar(10) DEFAULT 'low' NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "team_members" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"user_id" integer NOT NULL,
@@ -35,6 +47,7 @@ CREATE TABLE IF NOT EXISTS "teams" (
 	"stripe_product_id" text,
 	"plan_name" varchar(50),
 	"subscription_status" varchar(20),
+	"organization_name" varchar(255),
 	CONSTRAINT "teams_stripe_customer_id_unique" UNIQUE("stripe_customer_id"),
 	CONSTRAINT "teams_stripe_subscription_id_unique" UNIQUE("stripe_subscription_id")
 );
@@ -48,6 +61,7 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"deleted_at" timestamp,
+	"organization_name" varchar(255),
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
@@ -71,6 +85,18 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "invitations" ADD CONSTRAINT "invitations_invited_by_users_id_fk" FOREIGN KEY ("invited_by") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "tasks" ADD CONSTRAINT "tasks_creator_id_users_id_fk" FOREIGN KEY ("creator_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "tasks" ADD CONSTRAINT "tasks_assignee_id_users_id_fk" FOREIGN KEY ("assignee_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

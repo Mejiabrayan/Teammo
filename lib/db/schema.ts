@@ -5,19 +5,21 @@ import {
   text,
   timestamp,
   integer,
+  jsonb,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
-export const tasks = pgTable('tasks', {
+export const teams = pgTable('teams', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id')
-    .notNull()
-    .references(() => users.id),
-  title: varchar('title', { length: 255 }).notNull(),
-  description: text('description'),
-  status: varchar('status', { length: 20 }).notNull().default('To Do'),
+  name: varchar('name', { length: 100 }).notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
+  stripeCustomerId: text('stripe_customer_id').unique(),
+  stripeSubscriptionId: text('stripe_subscription_id').unique(),
+  stripeProductId: text('stripe_product_id'),
+  planName: varchar('plan_name', { length: 50 }),
+  subscriptionStatus: varchar('subscription_status', { length: 20 }),
+  organizationName: varchar('organization_name', { length: 255 }),
 });
 
 export const users = pgTable('users', {
@@ -32,17 +34,21 @@ export const users = pgTable('users', {
   organizationName: varchar('organization_name', { length: 255 }),
 });
 
-export const teams = pgTable('teams', {
+export const tasks = pgTable('tasks', {
   id: serial('id').primaryKey(),
-  name: varchar('name', { length: 100 }).notNull(),
+  creatorId: integer('creator_id')
+    .notNull()
+    .references(() => users.id),
+  assigneeId: integer('assignee_id')
+    .notNull()
+    .references(() => users.id),
+  title: varchar('title', { length: 255 }).notNull(),
+  description: text('description'),
+  status: varchar('status', { length: 20 }).notNull().default('To Do'),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
-  stripeCustomerId: text('stripe_customer_id').unique(),
-  stripeSubscriptionId: text('stripe_subscription_id').unique(),
-  stripeProductId: text('stripe_product_id'),
-  planName: varchar('plan_name', { length: 50 }),
-  subscriptionStatus: varchar('subscription_status', { length: 20 }),
-  organizationName: varchar('organization_name', { length: 255 }),
+  priority: varchar('priority', { length: 10 }).notNull().default('low'),
+  tags: jsonb('tags').default([]),
 });
 
 export const teamMembers = pgTable('team_members', {
@@ -86,20 +92,27 @@ export const teamsRelations = relations(teams, ({ many }) => ({
   teamMembers: many(teamMembers),
   activityLogs: many(activityLogs),
   invitations: many(invitations),
-  tasks: many(tasks),
 }));
 
 export const tasksRelations = relations(tasks, ({ one }) => ({
-  user: one(users, {
-    fields: [tasks.userId],
+  creator: one(users, {
+    fields: [tasks.creatorId],
     references: [users.id],
+    relationName: 'creator',
+  }),
+  assignee: one(users, {
+    fields: [tasks.assigneeId],
+    references: [users.id],
+    relationName: 'assignee',
   }),
 }));
 
 export const usersRelations = relations(users, ({ many }) => ({
   teamMembers: many(teamMembers),
-  invitationsSent: many(invitations),
-  tasks: many(tasks),
+  invitationsSent: many(invitations, { relationName: 'invitedByUser' }),
+  createdTasks: many(tasks, { relationName: 'creator' }),
+  assignedTasks: many(tasks, { relationName: 'assignee' }),
+  activityLogs: many(activityLogs),
 }));
 
 export const invitationsRelations = relations(invitations, ({ one }) => ({
@@ -107,9 +120,10 @@ export const invitationsRelations = relations(invitations, ({ one }) => ({
     fields: [invitations.teamId],
     references: [teams.id],
   }),
-  invitedBy: one(users, {
+  invitedByUser: one(users, {
     fields: [invitations.invitedBy],
     references: [users.id],
+    relationName: 'invitedByUser',
   }),
 }));
 
@@ -167,3 +181,12 @@ export enum ActivityType {
   ACCEPT_INVITATION = 'ACCEPT_INVITATION',
   UPDATE_ORGANIZATION_NAME = 'UPDATE_ORGANIZATION_NAME',
 }
+
+export const TaskTag = {
+  DESIGN: 'design',
+  RESEARCH: 'research',
+  PROTOTYPE: 'prototype',
+  CLIENT: 'client',
+} as const;
+
+export type TaskTag = typeof TaskTag[keyof typeof TaskTag];

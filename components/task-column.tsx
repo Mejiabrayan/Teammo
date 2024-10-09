@@ -11,7 +11,7 @@ interface TaskColumnProps {
 
 export function TaskColumn({ column, tasks, onSelectTask, onDeleteTask }: TaskColumnProps) {
   return (
-    <div className='flex-1 min-w-[250px] max-w-[350px] rounded-lg p-4 flex flex-col bg-gray-50'>
+    <div className='flex-1 min-w-[250px] max-w-[350px] rounded-lg p-4 flex flex-col '>
       <h2 className='font-semibold mb-4 flex items-center'>
         {getStatusBadge(column)}
         <span className='ml-2 text-gray-600 text-sm'>({tasks.length})</span>

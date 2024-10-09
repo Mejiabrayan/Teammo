@@ -1,17 +1,25 @@
+import { TaskTag } from '@/lib/db/schema';
+
+
+
 export type Task = {
   id: number;
-  userId: number;
+  creatorId: number;
+  assigneeId: number;
   title: string;
   description: string | null;
-  status: 'To Do' | 'In Progress' | 'Done';
+  status: string;
   createdAt: Date;
   updatedAt: Date;
+  priority: string;
+  tags: TaskTag[];
 };
 
 export type User = {
   id: number;
   name: string | null;
   email: string;
+  passwordHash: string;
   role: string;
   createdAt: Date;
   updatedAt: Date;
@@ -30,4 +38,33 @@ export type Team = {
   planName: string | null;
   subscriptionStatus: string | null;
   organizationName: string | null;
+};
+
+
+
+export type TeamMember = {
+  id: number;
+  userId: number;
+  teamId: number;
+  role: string;
+  joinedAt: Date;
+};
+
+export type ActivityLog = {
+  id: number;
+  teamId: number;
+  userId: number | null;
+  action: string;
+  timestamp: Date;
+  ipAddress: string | null;
+};
+
+export type Invitation = {
+  id: number;
+  teamId: number;
+  email: string;
+  role: string;
+  invitedBy: number;
+  invitedAt: Date;
+  status: string;
 };

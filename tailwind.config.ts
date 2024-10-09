@@ -54,6 +54,27 @@ const config: Config = {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
+        // New brand colors
+        brand: {
+          dark: '#25282B',
+          gray: '#CACCC6',
+          green: '#C9FF18',
+          light: '#F6F6EF',
+          white: '#FFFFFF',
+        },
+      },
+      boxShadow: {
+        input: `
+          0px 1px 0px -1px var(--tw-shadow-color),
+          0px 1px 1px -1px var(--tw-shadow-color),
+          0px 1px 2px -1px var(--tw-shadow-color),
+          0px 2px 4px -2px var(--tw-shadow-color),
+          0px 3px 6px -3px var(--tw-shadow-color)
+        `,
+        highlight: `
+          inset 0px 0px 0px 1px var(--tw-shadow-color),
+          inset 0px 1px 0px var(--tw-shadow-color)
+        `,
       },
     },
   },
@@ -62,4 +83,5 @@ const config: Config = {
     require('tailwindcss-animate'),
   ],
 };
+
 export default config;
