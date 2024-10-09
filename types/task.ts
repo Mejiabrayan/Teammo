@@ -25,6 +25,7 @@ export type User = {
   updatedAt: Date;
   deletedAt: Date | null;
   organizationName: string | null;
+  profilePicture?: string;
 };
 
 export type Team = {
@@ -68,3 +69,24 @@ export type Invitation = {
   invitedAt: Date;
   status: string;
 };
+
+export type TeamDataWithMembers = Team & {
+  teamMembers: (TeamMember & {
+    user: Pick<User, 'id' | 'name' | 'email' | 'organizationName' | 'profilePicture'>;
+  })[];
+};
+
+export enum ActivityType {
+  SIGN_UP = 'SIGN_UP',
+  SIGN_IN = 'SIGN_IN',
+  SIGN_OUT = 'SIGN_OUT',
+  UPDATE_PASSWORD = 'UPDATE_PASSWORD',
+  DELETE_ACCOUNT = 'DELETE_ACCOUNT',
+  UPDATE_ACCOUNT = 'UPDATE_ACCOUNT',
+  CREATE_TEAM = 'CREATE_TEAM',
+  REMOVE_TEAM_MEMBER = 'REMOVE_TEAM_MEMBER',
+  INVITE_TEAM_MEMBER = 'INVITE_TEAM_MEMBER',
+  ACCEPT_INVITATION = 'ACCEPT_INVITATION',
+  UPDATE_ORGANIZATION_NAME = 'UPDATE_ORGANIZATION_NAME',
+  UPDATE_PROFILE_PICTURE = 'UPDATE_PROFILE_PICTURE',
+}
