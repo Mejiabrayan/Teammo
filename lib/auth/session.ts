@@ -44,16 +44,21 @@ export async function getSession() {
 }
 
 export async function setSession(user: NewUser) {
-  const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
-  const session: SessionData = {
-    user: { id: user.id! },
-    expires: expiresInOneDay.toISOString(),
-  };
-  const encryptedSession = await signToken(session);
-  cookies().set('session', encryptedSession, {
-    expires: expiresInOneDay,
-    httpOnly: true,
-    secure: true,
-    sameSite: 'lax',
-  });
+  try {
+    const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    const session: SessionData = {
+      user: { id: user.id! },
+      expires: expiresInOneDay.toISOString(),
+    };
+    const encryptedSession = await signToken(session);
+    cookies().set('session', encryptedSession, {
+      expires: expiresInOneDay,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Only use secure in production
+      sameSite: 'lax',
+    });
+  } catch (error) {
+    console.error('Error setting session:', error);
+    throw new Error('Failed to set session');
+  }
 }

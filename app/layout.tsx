@@ -1,5 +1,5 @@
 import './globals.css';
-import type { Metadata, Viewport } from 'next';
+import type { Metadata } from 'next';
 import { Manrope } from 'next/font/google';
 import { UserProvider } from '@/lib/auth';
 import { getUser } from '@/lib/db/queries';
@@ -7,10 +7,6 @@ import { getUser } from '@/lib/db/queries';
 export const metadata: Metadata = {
   title: 'Teammo - The Team Management Platform',
   description: 'Get started quickly with Next.js, Postgres, and Stripe.',
-};
-
-export const viewport: Viewport = {
-  maximumScale: 1,
 };
 
 const manrope = Manrope({ subsets: ['latin'] });
