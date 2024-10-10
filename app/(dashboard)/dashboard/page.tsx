@@ -6,7 +6,7 @@ export default async function DashboardPage() {
   const user = await getUser();
   
   if (!user) {
-    redirect('/login');
+    redirect('/sign-in');
   }
 
   const tasks = await getTasks(user.id);

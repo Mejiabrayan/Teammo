@@ -36,7 +36,7 @@ export function AddTaskForm({ onTaskAddedAction }: AddTaskFormProps) {
       const result = await addTask({
         title: formData.get('title') as string,
         status: 'To Do',
-        assigneeId: 1, // Default assignee ID, update as needed
+        assigneeId: 1, 
         priority: 'low',
         description: null,
         tags: [],

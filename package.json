@@ -10,7 +10,7 @@
     "db:push": "drizzle-kit push",
     "db:migrate": "npx tsx lib/db/migrate.ts",
     "db:studio": "drizzle-kit studio",
-    "db:check": "drizzle-kit check:pg"
+    "db:check": "drizzle-kit check"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.0",

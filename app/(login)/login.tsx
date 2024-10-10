@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { useActionState } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -10,7 +9,7 @@ import { Loader2 } from 'lucide-react';
 import { signIn, signUp } from './actions';
 import { ActionState } from '@/lib/auth/middleware';
 
-export default function LoginForm({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
+export function Login({ mode = 'signin' }: { mode?: 'signin' | 'signup' }) {
   const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect');
   const priceId = searchParams.get('priceId');
@@ -23,12 +22,9 @@ export default function LoginForm({ mode = 'signin' }: { mode?: 'signin' | 'sign
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="max-w-md w-full space-y-8 p-8 bg-white shadow-lg rounded-lg">
-        <div className="flex flex-col items-center">
-          <Image src="/logo.svg" alt="Logo" width={64} height={64} />
-          <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
-            {mode === 'signin' ? 'Sign in' : 'Sign up'}
-          </h2>
-        </div>
+        <h2 className="text-center text-3xl font-bold text-gray-900">
+          {mode === 'signin' ? 'Sign in' : 'Sign up'}
+        </h2>
 
         <form className="mt-8 space-y-6" action={formAction}>
           <input type="hidden" name="redirect" value={redirect || ''} />
@@ -80,7 +76,7 @@ export default function LoginForm({ mode = 'signin' }: { mode?: 'signin' | 'sign
             href={`${mode === 'signin' ? '/sign-up' : '/sign-in'}${
               redirect ? `?redirect=${redirect}` : ''
             }${priceId ? `&priceId=${priceId}` : ''}`}
-            className="font-medium text-primary hover:text-primary/80"
+            className="font-medium text-blue-600 hover:text-blue-500"
           >
             {mode === 'signin' ? 'Sign up' : 'Sign in'}
           </Link>
